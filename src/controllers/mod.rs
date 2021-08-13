@@ -1,12 +1,22 @@
-/// Source = microphone etc. something that takes in audio
-/// Source Output = application consuming that audio
-///
-/// Sink = headphones etc. something that plays out audio
-/// Sink Input = application producing that audio
-/// When you create a `SinkController`, you are working with audio playback devices and applications
-/// if you want to manipulate recording devices such as microphone volume,
-/// you'll need to use a `SourceController`. Both of these implement the same api, defined by
-/// the traits DeviceControl and AppControl
+//! # Terminologies
+//!
+//! When you create a `SinkController`, you are working with audio playback devices and applications
+//! if you want to manipulate recording devices such as microphone volume,
+//! you'll need to use a `SourceController`. Both of these implement the same API, defined by
+//! the traits DeviceControl and AppControl.
+//!
+//! ### Source
+//! Something that takes in audio (i.e. microphone)
+//!
+//! ### Source Output
+//! Application consuming that audio
+//!
+//! ### Sink
+//! Something that plays out audio (i.e. headphones)
+//!
+//! ### Sink Input
+//! Application producing that audio
+
 use std::cell::RefCell;
 use std::clone::Clone;
 use std::rc::Rc;
