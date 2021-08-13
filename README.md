@@ -1,18 +1,17 @@
-Rust PulsecAudio API
-====================
+# Rust PulseAudio API
 
-`pulsectl-rust` is a API wrapper for `libpulse_binding` to make pulseaudio application development easier.
-This is a wrapper around the introspector, and thus this library is only capable of modifying PulseAudio data (changing volume, routing applications and muting right now).
+`pulsectl-rs` is a API wrapper for `libpulse_binding` to make pulseaudio
+application development easier. This is a wrapper around the introspector, and
+thus this library is only capable of modifying PulseAudio data (changing volume,
+routing applications and muting right now).
+
+This is a fork of [`pulsectl-rust-fork`](https://github.com/JojiiOfficial/pulsectl) 
+which is then a fork of [`pulsectl-rust`](https://github.com/krruzic/pulsectl).
 
 ### Usage
 
-Add this to your `Cargo.toml`:
-```toml
-[dependencies]
-rust-pulsectl = "0.2.6"
-```
-
-Then, connect to PulseAudio by creating a `SinkController` for audio playback devices and apps or a `SourceController` for audio recording devices and apps.
+Connect to PulseAudio by creating a `SinkController` for audio playback devices
+and apps or a `SourceController` for audio recording devices and apps.
 
 ```rust
 // Simple application that lists all playback devices and their status
@@ -40,4 +39,3 @@ fn main() {
     }
 }
 ```
-
