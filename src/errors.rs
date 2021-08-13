@@ -32,6 +32,7 @@ impl fmt::Debug for PulseCtlError {
     }
 }
 
+#[allow(clippy::enum_variant_names)]
 pub(crate) enum PulseCtlErrorType {
     ConnectError,
     OperationError,
