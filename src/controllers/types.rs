@@ -14,7 +14,7 @@ use pulse::{
 /// created to be copyable / cloneable for use in and out of callbacks
 
 /// This is a wrapper around SinkPortInfo and SourcePortInfo as they have the same members
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct DevicePortInfo {
     /// Name of the sink.
     pub name: Option<String>,
@@ -105,13 +105,13 @@ impl<'a> From<def::SinkState> for DevState {
     }
 }
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub enum Flags {
     SourceFLags(def::SourceFlagSet),
     SinkFlags(def::SinkFlagSet),
 }
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct DeviceInfo {
     /// Index of the sink.
     pub index: u32,
@@ -221,7 +221,7 @@ impl<'a> From<&'a introspect::SourceInfo<'a>> for DeviceInfo {
     }
 }
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct ApplicationInfo {
     /// Index of the sink input.
     pub index: u32,
@@ -316,6 +316,7 @@ impl<'a> From<&'a introspect::SourceOutputInfo<'a>> for ApplicationInfo {
     }
 }
 
+#[derive(Debug)]
 pub struct ServerInfo {
     /// User name of the daemon process.
     pub user_name: Option<String>,
