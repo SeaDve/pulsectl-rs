@@ -1,5 +1,7 @@
 # Rust PulseAudio API
 
+[![docs](https://docs.rs/pulsectl-rs/badge.svg)](https://docs.rs/pulsectl-rs/) [![crates.io](https://img.shields.io/crates/v/pulsectl-rs)](https://crates.io/crates/pulsectl-rs) ![CI](https://github.com/SeaDve/pulsectl-rs/actions/workflows/ci.yml/badge.svg)
+
 `pulsectl-rs` is a API wrapper for `libpulse_binding` to make pulseaudio
 application development easier. This is a wrapper around the introspector, and
 thus this library is only capable of modifying PulseAudio data (changing volume,
