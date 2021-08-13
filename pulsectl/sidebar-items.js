@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["controllers",""]],"struct":[["Handler",""]]});
+initSidebarItems({"mod":[["controllers","Terminologies"]],"struct":[["Handler",""]]});
