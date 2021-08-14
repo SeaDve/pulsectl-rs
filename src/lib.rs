@@ -46,8 +46,8 @@ use std::cell::RefCell;
 use std::ops::Deref;
 use std::rc::Rc;
 
-pub use crate::error::Error;
 pub use crate::controllers::error::ControllerError;
+pub use crate::error::Error;
 
 /// The main wrapper of libpulse-binding API.
 pub struct Handler {
