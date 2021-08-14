@@ -8,35 +8,28 @@
 ///
 /// See examples/change_device_vol.rs for a more complete example
 /// ```no_run
-/// extern crate pulsectl;
-///
-/// use std::io;
-///
 /// use pulsectl::controllers::SinkController;
 /// use pulsectl::controllers::DeviceControl;
-/// fn main() {
-///     // create handler that calls functions on playback devices and apps
-///     let mut handler = SinkController::create().unwrap();
-///     let devices = handler
-///         .list_devices()
-///        .expect("Could not get list of playback devices");
 ///
-///     println!("Playback Devices");
-///     for dev in devices.clone() {
-///         println!(
-///             "[{}] {}, Volume: {}",
-///             dev.index,
-///             dev.description.as_ref().unwrap(),
-///             dev.volume.print()
-///         );
-///     }
+/// // create handler that calls functions on playback devices and apps
+/// let mut handler = SinkController::create().unwrap();
+/// let devices = handler
+///     .list_devices()
+///     .expect("Could not get list of playback devices");
+///
+/// println!("Playback Devices");
+/// for dev in devices.clone() {
+///     println!(
+///         "[{}] {}, Volume: {}",
+///         dev.index,
+///         dev.description.as_ref().unwrap(),
+///         dev.volume.print()
+///     );
 /// }
 /// ```
-extern crate libpulse_binding as pulse;
 
-use std::cell::RefCell;
-use std::ops::Deref;
-use std::rc::Rc;
+mod error;
+pub mod controllers;
 
 use pulse::{
     context::{introspect, Context},
@@ -45,10 +38,11 @@ use pulse::{
     proplist::Proplist,
 };
 
-use crate::errors::{PulseCtlError, PulseCtlErrorType::*};
+use std::cell::RefCell;
+use std::ops::Deref;
+use std::rc::Rc;
 
-pub mod controllers;
-mod errors;
+pub use crate::error::Error;
 
 pub struct Handler {
     pub mainloop: Rc<RefCell<Mainloop>>,
@@ -56,12 +50,8 @@ pub struct Handler {
     pub introspect: introspect::Introspector,
 }
 
-fn connect_error(err: &str) -> PulseCtlError {
-    PulseCtlError::new(ConnectError, err)
-}
-
 impl Handler {
-    pub fn connect(name: &str) -> Result<Handler, PulseCtlError> {
+    pub fn connect(name: &str) -> Result<Handler, Error> {
         let mut proplist = Proplist::new().unwrap();
         proplist
             .set_str(pulse::proplist::properties::APPLICATION_NAME, name)
@@ -71,7 +61,7 @@ impl Handler {
         if let Some(m) = Mainloop::new() {
             mainloop = Rc::new(RefCell::new(m));
         } else {
-            return Err(connect_error("Failed to create mainloop"));
+            return Err(Error::Connect("Failed to create mainloop"));
         }
 
         let context;
@@ -80,13 +70,13 @@ impl Handler {
         {
             context = Rc::new(RefCell::new(c));
         } else {
-            return Err(connect_error("Failed to create new context"));
+            return Err(Error::Connect("Failed to create new context"));
         }
 
         context
             .borrow_mut()
             .connect(None, pulse::context::FlagSet::NOFLAGS, None)
-            .map_err(|_| connect_error("Failed to connect context"))?;
+            .map_err(|_| Error::Connect("Failed to connect context"))?;
 
         loop {
             match mainloop.borrow_mut().iterate(false) {
@@ -97,10 +87,7 @@ impl Handler {
                 IterateResult::Success(_) => {}
                 IterateResult::Quit(_) => {
                     eprintln!("iterate state was not success, quitting...");
-                    return Err(PulseCtlError::new(
-                        ConnectError,
-                        "Iterate state quit without an error",
-                    ));
+                    return Err(Error::Connect("Iterate state quit without an error"));
                 }
             }
 
@@ -108,10 +95,7 @@ impl Handler {
                 pulse::context::State::Ready => break,
                 pulse::context::State::Failed | pulse::context::State::Terminated => {
                     eprintln!("context state failed/terminated, quitting...");
-                    return Err(PulseCtlError::new(
-                        ConnectError,
-                        "Context state failed/terminated without an error",
-                    ));
+                    return Err(Error::Connect("Context state failed/terminated without an error"));
                 }
                 _ => {}
             }
@@ -129,16 +113,13 @@ impl Handler {
     pub fn wait_for_operation<G: ?Sized>(
         &mut self,
         op: Operation<G>,
-    ) -> Result<(), errors::PulseCtlError> {
+    ) -> Result<(), Error> {
         loop {
             match self.mainloop.borrow_mut().iterate(false) {
                 IterateResult::Err(e) => return Err(e.into()),
                 IterateResult::Success(_) => {}
                 IterateResult::Quit(_) => {
-                    return Err(PulseCtlError::new(
-                        OperationError,
-                        "Iterate state quit without an error",
-                    ));
+                    return Err(Error::Operation("Iterate state quit without an error"));
                 }
             }
             match op.get_state() {
@@ -147,10 +128,7 @@ impl Handler {
                 }
                 State::Running => {}
                 State::Cancelled => {
-                    return Err(PulseCtlError::new(
-                        OperationError,
-                        "Operation cancelled without an error",
-                    ));
+                    return Err(Error::Operation("Operation cancelled without an error"));
                 }
             }
         }
