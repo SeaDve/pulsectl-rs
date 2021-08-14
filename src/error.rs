@@ -30,6 +30,10 @@ impl std::fmt::Display for Error {
 
 impl From<PAErr> for Error {
     fn from(error: PAErr) -> Self {
-        Self::PulseAudio(error.to_string().unwrap_or_else(|| "Unknown error".to_string()))
+        Self::PulseAudio(
+            error
+                .to_string()
+                .unwrap_or_else(|| "Unknown error".to_string()),
+        )
     }
 }
