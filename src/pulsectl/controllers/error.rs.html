@@ -30,20 +30,20 @@
 </pre><pre class="rust">
 <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::error::Error</span>;
 
-<span class="doccomment">/// Error thrown while fetching data from pulseaudio,</span>
-<span class="doccomment">/// has two variants: PulseCtlError for when PulseAudio returns an error code</span>
-<span class="doccomment">/// and GetInfoError when a request for data fails for whatever reason</span>
+<span class="doccomment">/// Error thrown while fetching data from pulseaudio.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ControllerError</span> {
+    <span class="doccomment">/// When PulseAudio returns an error code</span>
     <span class="ident">PulseCtl</span>(<span class="ident">String</span>),
-    <span class="ident">GetInfo</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>),
+    <span class="doccomment">/// When a request for data fails for whatever reason</span>
+    <span class="ident">GetInfo</span>(<span class="ident">String</span>),
 }
 
 <span class="kw">impl</span> <span class="ident">std::fmt::Display</span> <span class="kw">for</span> <span class="ident">ControllerError</span> {
     <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std::fmt::Result</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="self">Self</span><span class="ident">::PulseCtl</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;Pulse ctl error: {}&quot;</span>, <span class="ident">e</span>)),
-            <span class="self">Self</span><span class="ident">::GetInfo</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;Get info error: {}&quot;</span>, <span class="ident">e</span>)),
+            <span class="self">Self</span><span class="ident">::PulseCtl</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;PulseCtl error: {}&quot;</span>, <span class="ident">e</span>)),
+            <span class="self">Self</span><span class="ident">::GetInfo</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;GetInfo error: {}&quot;</span>, <span class="ident">e</span>)),
         }
     }
 }

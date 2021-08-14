@@ -142,6 +142,12 @@
 <span id="140">140</span>
 <span id="141">141</span>
 <span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
 </pre><pre class="rust">
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">controllers</span>;
 <span class="doccomment">/// `pulsectl` is a high level wrapper around the PulseAudio bindings supplied by</span>
@@ -205,7 +211,7 @@
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">m</span>) <span class="op">=</span> <span class="ident">Mainloop::new</span>() {
             <span class="ident">mainloop</span> <span class="op">=</span> <span class="ident">Rc::new</span>(<span class="ident">RefCell::new</span>(<span class="ident">m</span>));
         } <span class="kw">else</span> {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Connect</span>(<span class="string">&quot;Failed to create mainloop&quot;</span>));
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Connect</span>(<span class="string">&quot;Failed to create mainloop&quot;</span>.<span class="ident">to_string</span>()));
         }
 
         <span class="kw">let</span> <span class="ident">context</span>;
@@ -214,13 +220,13 @@
         {
             <span class="ident">context</span> <span class="op">=</span> <span class="ident">Rc::new</span>(<span class="ident">RefCell::new</span>(<span class="ident">c</span>));
         } <span class="kw">else</span> {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Connect</span>(<span class="string">&quot;Failed to create new context&quot;</span>));
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Connect</span>(<span class="string">&quot;Failed to create new context&quot;</span>.<span class="ident">to_string</span>()));
         }
 
         <span class="ident">context</span>
             .<span class="ident">borrow_mut</span>()
             .<span class="ident">connect</span>(<span class="prelude-val">None</span>, <span class="ident">pulse::context::FlagSet::NOFLAGS</span>, <span class="prelude-val">None</span>)
-            .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">Error::Connect</span>(<span class="string">&quot;Failed to connect context&quot;</span>))<span class="question-mark">?</span>;
+            .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">Error::Connect</span>(<span class="string">&quot;Failed to connect context&quot;</span>.<span class="ident">to_string</span>()))<span class="question-mark">?</span>;
 
         <span class="kw">loop</span> {
             <span class="kw">match</span> <span class="ident">mainloop</span>.<span class="ident">borrow_mut</span>().<span class="ident">iterate</span>(<span class="bool-val">false</span>) {
@@ -231,7 +237,9 @@
                 <span class="ident">IterateResult::Success</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {}
                 <span class="ident">IterateResult::Quit</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="macro">eprintln!</span>(<span class="string">&quot;iterate state was not success, quitting...&quot;</span>);
-                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Connect</span>(<span class="string">&quot;Iterate state quit without an error&quot;</span>));
+                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Connect</span>(
+                        <span class="string">&quot;Iterate state quit without an error&quot;</span>.<span class="ident">to_string</span>(),
+                    ));
                 }
             }
 
@@ -240,7 +248,7 @@
                 <span class="ident">pulse::context::State::Failed</span> <span class="op">|</span> <span class="ident">pulse::context::State::Terminated</span> <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="macro">eprintln!</span>(<span class="string">&quot;context state failed/terminated, quitting...&quot;</span>);
                     <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Connect</span>(
-                        <span class="string">&quot;Context state failed/terminated without an error&quot;</span>,
+                        <span class="string">&quot;Context state failed/terminated without an error&quot;</span>.<span class="ident">to_string</span>(),
                     ));
                 }
                 <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {}
@@ -255,14 +263,16 @@
         })
     }
 
-    <span class="comment">// loop until the passed operation is completed</span>
+    <span class="doccomment">/// loops until the passed operation is completed</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wait_for_operation</span><span class="op">&lt;</span><span class="ident">G</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">op</span>: <span class="ident">Operation</span><span class="op">&lt;</span><span class="ident">G</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">loop</span> {
             <span class="kw">match</span> <span class="self">self</span>.<span class="ident">mainloop</span>.<span class="ident">borrow_mut</span>().<span class="ident">iterate</span>(<span class="bool-val">false</span>) {
                 <span class="ident">IterateResult::Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>.<span class="ident">into</span>()),
                 <span class="ident">IterateResult::Success</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {}
                 <span class="ident">IterateResult::Quit</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Operation</span>(<span class="string">&quot;Iterate state quit without an error&quot;</span>));
+                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Operation</span>(
+                        <span class="string">&quot;Iterate state quit without an error&quot;</span>.<span class="ident">to_string</span>(),
+                    ));
                 }
             }
             <span class="kw">match</span> <span class="ident">op</span>.<span class="ident">get_state</span>() {
@@ -271,7 +281,9 @@
                 }
                 <span class="ident">State::Running</span> <span class="op">=</span><span class="op">&gt;</span> {}
                 <span class="ident">State::Cancelled</span> <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Operation</span>(<span class="string">&quot;Operation cancelled without an error&quot;</span>));
+                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Operation</span>(
+                        <span class="string">&quot;Operation cancelled without an error&quot;</span>.<span class="ident">to_string</span>(),
+                    ));
                 }
             }
         }

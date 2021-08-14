@@ -34,20 +34,22 @@
 <span id="32">32</span>
 <span id="33">33</span>
 <span id="34">34</span>
+<span id="35">35</span>
 </pre><pre class="rust">
 <span class="kw">use</span> <span class="ident">pulse::error::PAErr</span>;
 
 <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::controllers::error::ControllerError</span>;
 
-<span class="doccomment">/// Error thrown when PulseAudio throws an error code, there are 3 variants</span>
+<span class="doccomment">/// Error thrown when PulseAudio throws an error code, there are 4 variants</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Error</span> {
     <span class="doccomment">/// When there&#39;s an error establishing a connection</span>
-    <span class="ident">Connect</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>),
+    <span class="ident">Connect</span>(<span class="ident">String</span>),
     <span class="doccomment">/// When the requested operation quis unexpectedly or is cancelled</span>
-    <span class="ident">Operation</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>),
+    <span class="ident">Operation</span>(<span class="ident">String</span>),
     <span class="doccomment">/// When PulseAudio returns an error code in any circumstance</span>
     <span class="ident">PulseAudio</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// When an error occurred while fetching data from pulseaudio</span>
     <span class="ident">Controller</span>(<span class="ident">ControllerError</span>),
 }
 
@@ -56,10 +58,10 @@
 <span class="kw">impl</span> <span class="ident">std::fmt::Display</span> <span class="kw">for</span> <span class="ident">Error</span> {
     <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std::fmt::Result</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="self">Self</span><span class="ident">::Connect</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;Connect error: {}&quot;</span>, <span class="ident">e</span>)),
-            <span class="self">Self</span><span class="ident">::Operation</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;Operation error: {}&quot;</span>, <span class="ident">e</span>)),
-            <span class="self">Self</span><span class="ident">::PulseAudio</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;Pulse audio error: {}&quot;</span>, <span class="ident">e</span>)),
-            <span class="self">Self</span><span class="ident">::Controller</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;Controller error: {}&quot;</span>, <span class="ident">e</span>)),
+            <span class="self">Self</span><span class="ident">::Connect</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;ConnectError: {}&quot;</span>, <span class="ident">e</span>)),
+            <span class="self">Self</span><span class="ident">::Operation</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;OperationError: {}&quot;</span>, <span class="ident">e</span>)),
+            <span class="self">Self</span><span class="ident">::PulseAudio</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;PulseAudioError: {}&quot;</span>, <span class="ident">e</span>)),
+            <span class="self">Self</span><span class="ident">::Controller</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;ControllerError: {}&quot;</span>, <span class="ident">e</span>)),
         }
     }
 }
