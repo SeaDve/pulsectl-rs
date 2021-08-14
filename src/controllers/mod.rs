@@ -1,13 +1,7 @@
-//! These are controllers helpful when working with applications and devices.
+//! Helpful wrappers when working with applications and devices.
 //!
 //! Both of these controllers implement the same API, defined by the traits DeviceControl
 //! and AppControl.
-//!
-//! ### Source Output
-//! Application consuming that audio
-//!
-//! ### Sink Input
-//! Application producing that audio
 
 pub(crate) mod error;
 pub mod types;
@@ -65,7 +59,7 @@ fn volume_from_percent(volume: f64) -> f64 {
     (volume * 100.0) * (f64::from(pulse::volume::Volume::NORMAL.0) / 100.0)
 }
 
-/// This handles device that plays out audio (e.g., headphone), so it is appropriate when dealing
+/// This handles device that plays out audio (e.g., headphone), so this is appropriate when dealing
 /// with audio playback devices and applications.
 pub struct SinkController {
     pub handler: Handler,
@@ -344,7 +338,7 @@ impl AppControl<ApplicationInfo> for SinkController {
     }
 }
 
-/// This handles devices which takes in audio (e.g., microphone), so it is appropriate when
+/// This handles devices which takes in audio (e.g., microphone), so this is appropriate when
 /// manipulating recording devices such as microphone volume.
 pub struct SourceController {
     pub handler: Handler,

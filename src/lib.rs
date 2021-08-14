@@ -48,7 +48,7 @@ use std::rc::Rc;
 
 pub use crate::error::Error;
 
-/// Main wrapper on libpulse-binding API
+/// The main wrapper of libpulse-binding API.
 pub struct Handler {
     /// Safe interface to the internal PA Mainloop.
     pub mainloop: Rc<RefCell<Mainloop>>,
