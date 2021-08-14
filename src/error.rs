@@ -1,6 +1,6 @@
 use pulse::error::PAErr;
 
-use crate::controllers::error::ControllerError;
+pub use crate::controllers::error::ControllerError;
 
 /// Error thrown when PulseAudio throws an error code.
 #[derive(Debug, Clone)]
