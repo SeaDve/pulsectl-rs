@@ -37,3 +37,18 @@ jobs:
         with:
           command: clippy
           args: -- -D warnings
+
+  test:
+    name: Test Suite
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - uses: actions-rs/cargo@v1
+        with:
+          command: test
+
