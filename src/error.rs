@@ -2,16 +2,16 @@ use pulse::error::PAErr;
 
 use crate::controllers::error::ControllerError;
 
-/// Error thrown when PulseAudio throws an error code, there are 4 variants
+/// Error thrown when PulseAudio throws an error code.
 #[derive(Debug, Clone)]
 pub enum Error {
-    /// When there's an error establishing a connection
+    /// An error that may occur while establishing a connection.
     Connect(String),
-    /// When the requested operation quis unexpectedly or is cancelled
+    /// The requested operation is cancelled or quitted unexpectedly.
     Operation(String),
-    /// When PulseAudio returns an error code in any circumstance
+    /// PulseAudio returns an error code in any circumstance.
     PulseAudio(String),
-    /// When an error occurred while fetching data from pulseaudio
+    /// A problem occurs while fetching data from pulseaudio.
     Controller(ControllerError),
 }
 

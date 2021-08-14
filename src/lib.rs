@@ -1,37 +1,42 @@
+//! `pulsectl` is a high level wrapper around the PulseAudio bindings supplied by
+//! `libpulse-binding` to make application development easier. It provides simple access to sinks,
+//! inputs, sources and outputs allowing one to write audio control programs with ease. This
+//! library is only capable of modifying PulseAudio data (e.g., changing volume, routing
+//! applications, and muting).
+//!
+//! # Example
+//!
+//! List all currently connected playback devices
+//!
+//! ```no_run
+//! use pulsectl::controllers::SinkController;
+//! use pulsectl::controllers::DeviceControl;
+//!
+//! // create handler that calls functions on playback devices and apps
+//! let mut handler = SinkController::create().unwrap();
+//!
+//! let devices = handler
+//!     .list_devices()
+//!     .expect("Could not get list of playback devices.");
+//!
+//! println!("Playback Devices: ");
+//! for dev in devices.clone() {
+//!     println!(
+//!         "[{}] {}, Volume: {}",
+//!         dev.index,
+//!         dev.description.as_ref().unwrap(),
+//!         dev.volume.print()
+//!     );
+//! }
+//! ```
+//!
+//! For a more complete example, see `examples/change_device_vol.rs`.
+
 pub mod controllers;
-/// `pulsectl` is a high level wrapper around the PulseAudio bindings supplied by
-/// `libpulse_binding`. It provides simple access to sinks, inputs, sources and outputs allowing
-/// one to write audio control programs with ease.
-///
-/// ## Quick Example
-///
-/// The following example demonstrates listing all of the playback devices currently connected
-///
-/// See examples/change_device_vol.rs for a more complete example
-/// ```no_run
-/// use pulsectl::controllers::SinkController;
-/// use pulsectl::controllers::DeviceControl;
-///
-/// // create handler that calls functions on playback devices and apps
-/// let mut handler = SinkController::create().unwrap();
-/// let devices = handler
-///     .list_devices()
-///     .expect("Could not get list of playback devices");
-///
-/// println!("Playback Devices");
-/// for dev in devices.clone() {
-///     println!(
-///         "[{}] {}, Volume: {}",
-///         dev.index,
-///         dev.description.as_ref().unwrap(),
-///         dev.volume.print()
-///     );
-/// }
-/// ```
 mod error;
 
 use pulse::{
-    context::{introspect, Context},
+    context::{introspect::Introspector, Context},
     mainloop::standard::{IterateResult, Mainloop},
     operation::{Operation, State},
     proplist::Proplist,
@@ -43,10 +48,14 @@ use std::rc::Rc;
 
 pub use crate::error::Error;
 
+/// Main wrapper on libpulse-binding API
 pub struct Handler {
+    /// Safe interface to the internal PA Mainloop.
     pub mainloop: Rc<RefCell<Mainloop>>,
+    /// An opaque connection context to a daemon.
     pub context: Rc<RefCell<Context>>,
-    pub introspect: introspect::Introspector,
+    /// A wrapper object providing introspection routines to a context.
+    pub introspect: Introspector,
 }
 
 impl Handler {

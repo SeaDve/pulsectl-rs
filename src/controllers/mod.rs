@@ -1,18 +1,10 @@
-//! # Terminologies
+//! These are controllers helpful when working with applications and devices.
 //!
-//! When you create a `SinkController`, you are working with audio playback devices and applications
-//! if you want to manipulate recording devices such as microphone volume,
-//! you'll need to use a `SourceController`. Both of these implement the same API, defined by
-//! the traits DeviceControl and AppControl.
-//!
-//! ### Source
-//! Something that takes in audio (i.e. microphone)
+//! Both of these controllers implement the same API, defined by the traits DeviceControl
+//! and AppControl.
 //!
 //! ### Source Output
 //! Application consuming that audio
-//!
-//! ### Sink
-//! Something that plays out audio (i.e. headphones)
 //!
 //! ### Sink Input
 //! Application producing that audio
@@ -73,6 +65,8 @@ fn volume_from_percent(volume: f64) -> f64 {
     (volume * 100.0) * (f64::from(pulse::volume::Volume::NORMAL.0) / 100.0)
 }
 
+/// This handles device that plays out audio (e.g., headphone), so it is appropriate when dealing
+/// with audio playback devices and applications.
 pub struct SinkController {
     pub handler: Handler,
 }
@@ -350,6 +344,8 @@ impl AppControl<ApplicationInfo> for SinkController {
     }
 }
 
+/// This handles devices which takes in audio (e.g., microphone), so it is appropriate when
+/// manipulating recording devices such as microphone volume.
 pub struct SourceController {
     pub handler: Handler,
 }
