@@ -60,7 +60,7 @@ impl Handler {
         if let Some(m) = Mainloop::new() {
             mainloop = Rc::new(RefCell::new(m));
         } else {
-            return Err(Error::Connect("Failed to create mainloop"));
+            return Err(Error::Connect("Failed to create mainloop".to_string()));
         }
 
         let context;
@@ -69,13 +69,13 @@ impl Handler {
         {
             context = Rc::new(RefCell::new(c));
         } else {
-            return Err(Error::Connect("Failed to create new context"));
+            return Err(Error::Connect("Failed to create new context".to_string()));
         }
 
         context
             .borrow_mut()
             .connect(None, pulse::context::FlagSet::NOFLAGS, None)
-            .map_err(|_| Error::Connect("Failed to connect context"))?;
+            .map_err(|_| Error::Connect("Failed to connect context".to_string()))?;
 
         loop {
             match mainloop.borrow_mut().iterate(false) {
@@ -86,7 +86,9 @@ impl Handler {
                 IterateResult::Success(_) => {}
                 IterateResult::Quit(_) => {
                     eprintln!("iterate state was not success, quitting...");
-                    return Err(Error::Connect("Iterate state quit without an error"));
+                    return Err(Error::Connect(
+                        "Iterate state quit without an error".to_string(),
+                    ));
                 }
             }
 
@@ -95,7 +97,7 @@ impl Handler {
                 pulse::context::State::Failed | pulse::context::State::Terminated => {
                     eprintln!("context state failed/terminated, quitting...");
                     return Err(Error::Connect(
-                        "Context state failed/terminated without an error",
+                        "Context state failed/terminated without an error".to_string(),
                     ));
                 }
                 _ => {}
@@ -110,14 +112,16 @@ impl Handler {
         })
     }
 
-    // loop until the passed operation is completed
+    /// loops until the passed operation is completed
     pub fn wait_for_operation<G: ?Sized>(&mut self, op: Operation<G>) -> Result<(), Error> {
         loop {
             match self.mainloop.borrow_mut().iterate(false) {
                 IterateResult::Err(e) => return Err(e.into()),
                 IterateResult::Success(_) => {}
                 IterateResult::Quit(_) => {
-                    return Err(Error::Operation("Iterate state quit without an error"));
+                    return Err(Error::Operation(
+                        "Iterate state quit without an error".to_string(),
+                    ));
                 }
             }
             match op.get_state() {
@@ -126,7 +130,9 @@ impl Handler {
                 }
                 State::Running => {}
                 State::Cancelled => {
-                    return Err(Error::Operation("Operation cancelled without an error"));
+                    return Err(Error::Operation(
+                        "Operation cancelled without an error".to_string(),
+                    ));
                 }
             }
         }

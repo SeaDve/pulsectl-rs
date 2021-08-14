@@ -96,9 +96,9 @@ impl SinkController {
         });
         self.handler.wait_for_operation(op)?;
         let mut result = server.borrow_mut();
-        result.take().unwrap().ok_or(ControllerError::GetInfo(
-            "Error getting information about the server",
-        ))
+        result.take().unwrap().ok_or_else(|| {
+            ControllerError::GetInfo("Error getting information about the server".to_string())
+        })
     }
 }
 
@@ -139,7 +139,7 @@ impl DeviceControl<DeviceInfo> for SinkController {
         let mut result = list.borrow_mut();
         result
             .take()
-            .ok_or(ControllerError::GetInfo("Error getting device list"))
+            .ok_or_else(|| ControllerError::GetInfo("Error getting device list".to_string()))
     }
     fn get_device_by_index(&mut self, index: u32) -> Result<DeviceInfo, ControllerError> {
         let device = Rc::new(RefCell::new(Some(None)));
@@ -157,7 +157,7 @@ impl DeviceControl<DeviceInfo> for SinkController {
         result
             .take()
             .unwrap()
-            .ok_or(ControllerError::GetInfo("Error getting requested device"))
+            .ok_or_else(|| ControllerError::GetInfo("Error getting requested device".to_string()))
     }
     fn get_device_by_name(&mut self, name: &str) -> Result<DeviceInfo, ControllerError> {
         let device = Rc::new(RefCell::new(Some(None)));
@@ -175,7 +175,7 @@ impl DeviceControl<DeviceInfo> for SinkController {
         result
             .take()
             .unwrap()
-            .ok_or(ControllerError::GetInfo("Error getting requested device"))
+            .ok_or_else(|| ControllerError::GetInfo("Error getting requested device".to_string()))
     }
 
     fn set_device_volume_by_index(&mut self, index: u32, volume: &ChannelVolumes) {
@@ -248,7 +248,7 @@ impl AppControl<ApplicationInfo> for SinkController {
         let mut result = list.borrow_mut();
         result
             .take()
-            .ok_or(ControllerError::GetInfo("Error getting application list"))
+            .ok_or_else(|| ControllerError::GetInfo("Error getting application list".to_string()))
     }
 
     fn get_app_by_index(&mut self, index: u32) -> Result<ApplicationInfo, ControllerError> {
@@ -267,7 +267,7 @@ impl AppControl<ApplicationInfo> for SinkController {
         result
             .take()
             .unwrap()
-            .ok_or(ControllerError::GetInfo("Error getting requested app"))
+            .ok_or_else(|| ControllerError::GetInfo("Error getting requested app".to_string()))
     }
 
     fn increase_app_volume_by_percent(&mut self, index: u32, delta: f64) {
@@ -376,7 +376,7 @@ impl SourceController {
         result
             .take()
             .unwrap()
-            .ok_or(ControllerError::GetInfo("Error getting application list"))
+            .ok_or_else(|| ControllerError::GetInfo("Error getting application list".to_string()))
     }
 }
 
@@ -417,7 +417,7 @@ impl DeviceControl<DeviceInfo> for SourceController {
         let mut result = list.borrow_mut();
         result
             .take()
-            .ok_or(ControllerError::GetInfo("Error getting application list"))
+            .ok_or_else(|| ControllerError::GetInfo("Error getting application list".to_string()))
     }
     fn get_device_by_index(&mut self, index: u32) -> Result<DeviceInfo, ControllerError> {
         let device = Rc::new(RefCell::new(Some(None)));
@@ -435,7 +435,7 @@ impl DeviceControl<DeviceInfo> for SourceController {
         result
             .take()
             .unwrap()
-            .ok_or(ControllerError::GetInfo("Error getting application list"))
+            .ok_or_else(|| ControllerError::GetInfo("Error getting application list".to_string()))
     }
     fn get_device_by_name(&mut self, name: &str) -> Result<DeviceInfo, ControllerError> {
         let device = Rc::new(RefCell::new(Some(None)));
@@ -453,7 +453,7 @@ impl DeviceControl<DeviceInfo> for SourceController {
         result
             .take()
             .unwrap()
-            .ok_or(ControllerError::GetInfo("Error getting application list"))
+            .ok_or_else(|| ControllerError::GetInfo("Error getting application list".to_string()))
     }
 
     fn set_device_volume_by_index(&mut self, index: u32, volume: &ChannelVolumes) {
@@ -526,7 +526,7 @@ impl AppControl<ApplicationInfo> for SourceController {
         let mut result = list.borrow_mut();
         result
             .take()
-            .ok_or(ControllerError::GetInfo("Error getting application list"))
+            .ok_or_else(|| ControllerError::GetInfo("Error getting application list".to_string()))
     }
 
     fn get_app_by_index(&mut self, index: u32) -> Result<ApplicationInfo, ControllerError> {
@@ -545,7 +545,7 @@ impl AppControl<ApplicationInfo> for SourceController {
         result
             .take()
             .unwrap()
-            .ok_or(ControllerError::GetInfo("Error getting application list"))
+            .ok_or_else(|| ControllerError::GetInfo("Error getting application list".to_string()))
     }
 
     fn increase_app_volume_by_percent(&mut self, index: u32, delta: f64) {
