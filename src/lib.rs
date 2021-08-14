@@ -4,6 +4,9 @@
 //! library is only capable of modifying PulseAudio data (e.g., changing volume, routing
 //! applications, and muting).
 //!
+//! This is a fork of [` JojiiOfficial/pulsectl-rust-fork`](https://github.com/JojiiOfficial/pulsectl)
+//! which is then a fork of [`krruzic/pulsectl-rust`](https://github.com/krruzic/pulsectl).
+//!
 //! # Example
 //!
 //! List all currently connected playback devices

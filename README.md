@@ -8,37 +8,33 @@ access to sinks, inputs, sources and outputs allowing one to write audio control
 programs with ease. This library is only capable of modifying PulseAudio data
 (e.g., changing volume, routing applications, and muting).
 
-This is a fork of [`pulsectl-rust-fork`](https://github.com/JojiiOfficial/pulsectl) 
-which is then a fork of [`pulsectl-rust`](https://github.com/krruzic/pulsectl).
+This is a fork of [` JojiiOfficial/pulsectl-rust-fork`](https://github.com/JojiiOfficial/pulsectl)
+which is then a fork of [`krruzic/pulsectl-rust`](https://github.com/krruzic/pulsectl).
 
-### Usage
+### Example
 
-Connect to PulseAudio by creating a `SinkController` for audio playback devices
-and apps or a `SourceController` for audio recording devices and apps.
+List all currently connected playback devices
 
 ```rust
-// Simple application that lists all playback devices and their status
-// See examples/change_device_vol.rs for a more complete example
-extern crate pulsectl;
-
-use std::io;
-
 use pulsectl::controllers::SinkController;
 use pulsectl::controllers::DeviceControl;
-fn main() {
-    // create handler that calls functions on playback devices and apps
-    let mut handler = SinkController::create();
-    let devices = handler
-        .list_devices()
-        .expect("Could not get list of playback devices");
-    println!("Playback Devices");
-    for dev in devices.clone() {
-        println!(
-            "[{}] {}, [Volume: {}]",
-            dev.index,
-            dev.description.as_ref().unwrap(),
-            dev.volume.print()
-        );
-    }
+
+// create handler that calls functions on playback devices and apps
+let mut handler = SinkController::create().unwrap();
+
+let devices = handler
+    .list_devices()
+    .expect("Could not get list of playback devices.");
+    
+println!("Playback Devices: ");
+for dev in devices.clone() {
+    println!(
+        "[{}] {}, Volume: {}",
+        dev.index,
+        dev.description.as_ref().unwrap(),
+        dev.volume.print()
+    );
 }
 ```
+
+For a more complete example, see `examples/change_device_vol.rs`.
