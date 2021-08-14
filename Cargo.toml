@@ -8,8 +8,8 @@ description = "A higher level API for libpulse-binding"
 readme = "README.md"
 keywords = ["pulse", "pulseaudio", "binding", "audio", "api"]
 categories = ["api-bindings", "multimedia::audio"]
-homepage = "https://github.com/SeaDve/pulsectl"
-repository = "https://github.com/SeaDve/pulsectl"
+homepage = "https://github.com/SeaDve/pulsectl-rs"
+repository = "https://github.com/SeaDve/pulsectl-rs"
 
 [lib]
 name = "pulsectl"
