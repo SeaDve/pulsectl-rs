@@ -99,7 +99,7 @@ impl SinkController {
         result
             .take()
             .unwrap()
-            .ok_or({ ControllerError::GetInfo("Error getting information about the server") })
+            .ok_or(ControllerError::GetInfo("Error getting information about the server"))
     }
 }
 
