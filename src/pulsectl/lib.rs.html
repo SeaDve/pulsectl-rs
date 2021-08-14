@@ -208,7 +208,7 @@
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::error::Error</span>;
 
-<span class="doccomment">/// Main wrapper on libpulse-binding API</span>
+<span class="doccomment">/// The main wrapper of libpulse-binding API.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Handler</span> {
     <span class="doccomment">/// Safe interface to the internal PA Mainloop.</span>
     <span class="kw">pub</span> <span class="ident">mainloop</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">Mainloop</span><span class="op">&gt;</span><span class="op">&gt;</span>,

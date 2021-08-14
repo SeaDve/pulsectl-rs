@@ -35,6 +35,10 @@
 <span id="33">33</span>
 <span id="34">34</span>
 <span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
 </pre><pre class="rust">
 <span class="kw">use</span> <span class="ident">pulse::error::PAErr</span>;
 
@@ -68,7 +72,11 @@
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">PAErr</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">error</span>: <span class="ident">PAErr</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::PulseAudio</span>(<span class="ident">error</span>.<span class="ident">to_string</span>().<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="string">&quot;Unknown error&quot;</span>.<span class="ident">to_string</span>()))
+        <span class="self">Self</span><span class="ident">::PulseAudio</span>(
+            <span class="ident">error</span>
+                .<span class="ident">to_string</span>()
+                .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="string">&quot;Unknown error&quot;</span>.<span class="ident">to_string</span>()),
+        )
     }
 }
 </pre></div>

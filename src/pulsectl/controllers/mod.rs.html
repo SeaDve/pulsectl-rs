@@ -619,23 +619,11 @@
 <span id="617">617</span>
 <span id="618">618</span>
 <span id="619">619</span>
-<span id="620">620</span>
-<span id="621">621</span>
-<span id="622">622</span>
-<span id="623">623</span>
-<span id="624">624</span>
-<span id="625">625</span>
 </pre><pre class="rust">
-<span class="doccomment">//! These are controllers helpful when working with applications and devices.</span>
+<span class="doccomment">//! Helpful wrappers when working with applications and devices.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! Both of these controllers implement the same API, defined by the traits DeviceControl</span>
 <span class="doccomment">//! and AppControl.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ### Source Output</span>
-<span class="doccomment">//! Application consuming that audio</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ### Sink Input</span>
-<span class="doccomment">//! Application producing that audio</span>
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod</span> <span class="ident">error</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">types</span>;
@@ -693,7 +681,7 @@
     (<span class="ident">volume</span> <span class="op">*</span> <span class="number">100.0</span>) <span class="op">*</span> (<span class="ident">f64::from</span>(<span class="ident">pulse::volume::Volume::NORMAL</span>.<span class="number">0</span>) <span class="op">/</span> <span class="number">100.0</span>)
 }
 
-<span class="doccomment">/// This handles device that plays out audio (e.g., headphone), so it is appropriate when dealing</span>
+<span class="doccomment">/// This handles device that plays out audio (e.g., headphone), so this is appropriate when dealing</span>
 <span class="doccomment">/// with audio playback devices and applications.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SinkController</span> {
     <span class="kw">pub</span> <span class="ident">handler</span>: <span class="ident">Handler</span>,
@@ -972,7 +960,7 @@
     }
 }
 
-<span class="doccomment">/// This handles devices which takes in audio (e.g., microphone), so it is appropriate when</span>
+<span class="doccomment">/// This handles devices which takes in audio (e.g., microphone), so this is appropriate when</span>
 <span class="doccomment">/// manipulating recording devices such as microphone volume.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SourceController</span> {
     <span class="kw">pub</span> <span class="ident">handler</span>: <span class="ident">Handler</span>,
