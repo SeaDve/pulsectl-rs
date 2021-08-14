@@ -45,7 +45,7 @@
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Error</span> {
     <span class="doccomment">/// An error that may occur while establishing a connection.</span>
     <span class="ident">Connect</span>(<span class="ident">String</span>),
-    <span class="doccomment">/// The requested operation is cancelled or quitted unexpectedly.</span>
+    <span class="doccomment">/// The requested operation is cancelled or quits unexpectedly.</span>
     <span class="ident">Operation</span>(<span class="ident">String</span>),
     <span class="doccomment">/// PulseAudio returns an error code in any circumstance.</span>
     <span class="ident">PulseAudio</span>(<span class="ident">String</span>),
@@ -68,7 +68,7 @@
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">PAErr</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">error</span>: <span class="ident">PAErr</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::PulseAudio</span>(<span class="ident">error</span>.<span class="ident">to_string</span>().<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="string">&quot;Unknown&quot;</span>.<span class="ident">to_string</span>()))
+        <span class="self">Self</span><span class="ident">::PulseAudio</span>(<span class="ident">error</span>.<span class="ident">to_string</span>().<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="string">&quot;Unknown error&quot;</span>.<span class="ident">to_string</span>()))
     }
 }
 </pre></div>
