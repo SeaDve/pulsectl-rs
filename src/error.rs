@@ -7,7 +7,7 @@ use crate::controllers::error::ControllerError;
 pub enum Error {
     /// An error that may occur while establishing a connection.
     Connect(String),
-    /// The requested operation is cancelled or quitted unexpectedly.
+    /// The requested operation is cancelled or quits unexpectedly.
     Operation(String),
     /// PulseAudio returns an error code in any circumstance.
     PulseAudio(String),
@@ -30,6 +30,6 @@ impl std::fmt::Display for Error {
 
 impl From<PAErr> for Error {
     fn from(error: PAErr) -> Self {
-        Self::PulseAudio(error.to_string().unwrap_or_else(|| "Unknown".to_string()))
+        Self::PulseAudio(error.to_string().unwrap_or_else(|| "Unknown error".to_string()))
     }
 }
