@@ -148,41 +148,55 @@
 <span id="146">146</span>
 <span id="147">147</span>
 <span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
 </pre><pre class="rust">
+<span class="doccomment">//! `pulsectl` is a high level wrapper around the PulseAudio bindings supplied by</span>
+<span class="doccomment">//! `libpulse-binding` to make application development easier. It provides simple access to sinks,</span>
+<span class="doccomment">//! inputs, sources and outputs allowing one to write audio control programs with ease. This</span>
+<span class="doccomment">//! library is only capable of modifying PulseAudio data (e.g., changing volume, routing</span>
+<span class="doccomment">//! applications, and muting).</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! # Example</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! List all currently connected playback devices</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```no_run</span>
+<span class="doccomment">//! use pulsectl::controllers::SinkController;</span>
+<span class="doccomment">//! use pulsectl::controllers::DeviceControl;</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! // create handler that calls functions on playback devices and apps</span>
+<span class="doccomment">//! let mut handler = SinkController::create().unwrap();</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! let devices = handler</span>
+<span class="doccomment">//!     .list_devices()</span>
+<span class="doccomment">//!     .expect(&quot;Could not get list of playback devices.&quot;);</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! println!(&quot;Playback Devices: &quot;);</span>
+<span class="doccomment">//! for dev in devices.clone() {</span>
+<span class="doccomment">//!     println!(</span>
+<span class="doccomment">//!         &quot;[{}] {}, Volume: {}&quot;,</span>
+<span class="doccomment">//!         dev.index,</span>
+<span class="doccomment">//!         dev.description.as_ref().unwrap(),</span>
+<span class="doccomment">//!         dev.volume.print()</span>
+<span class="doccomment">//!     );</span>
+<span class="doccomment">//! }</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! For a more complete example, see `examples/change_device_vol.rs`.</span>
+
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">controllers</span>;
-<span class="doccomment">/// `pulsectl` is a high level wrapper around the PulseAudio bindings supplied by</span>
-<span class="doccomment">/// `libpulse_binding`. It provides simple access to sinks, inputs, sources and outputs allowing</span>
-<span class="doccomment">/// one to write audio control programs with ease.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ## Quick Example</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The following example demonstrates listing all of the playback devices currently connected</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// See examples/change_device_vol.rs for a more complete example</span>
-<span class="doccomment">/// ```no_run</span>
-<span class="doccomment">/// use pulsectl::controllers::SinkController;</span>
-<span class="doccomment">/// use pulsectl::controllers::DeviceControl;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// // create handler that calls functions on playback devices and apps</span>
-<span class="doccomment">/// let mut handler = SinkController::create().unwrap();</span>
-<span class="doccomment">/// let devices = handler</span>
-<span class="doccomment">///     .list_devices()</span>
-<span class="doccomment">///     .expect(&quot;Could not get list of playback devices&quot;);</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// println!(&quot;Playback Devices&quot;);</span>
-<span class="doccomment">/// for dev in devices.clone() {</span>
-<span class="doccomment">///     println!(</span>
-<span class="doccomment">///         &quot;[{}] {}, Volume: {}&quot;,</span>
-<span class="doccomment">///         dev.index,</span>
-<span class="doccomment">///         dev.description.as_ref().unwrap(),</span>
-<span class="doccomment">///         dev.volume.print()</span>
-<span class="doccomment">///     );</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// ```</span>
 <span class="kw">mod</span> <span class="ident">error</span>;
 
 <span class="kw">use</span> <span class="ident">pulse</span>::{
-    <span class="ident">context</span>::{<span class="ident">introspect</span>, <span class="ident">Context</span>},
+    <span class="ident">context</span>::{<span class="ident">introspect::Introspector</span>, <span class="ident">Context</span>},
     <span class="ident">mainloop::standard</span>::{<span class="ident">IterateResult</span>, <span class="ident">Mainloop</span>},
     <span class="ident">operation</span>::{<span class="ident">Operation</span>, <span class="ident">State</span>},
     <span class="ident">proplist::Proplist</span>,
@@ -194,10 +208,14 @@
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::error::Error</span>;
 
+<span class="doccomment">/// Main wrapper on libpulse-binding API</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Handler</span> {
+    <span class="doccomment">/// Safe interface to the internal PA Mainloop.</span>
     <span class="kw">pub</span> <span class="ident">mainloop</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">Mainloop</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// An opaque connection context to a daemon.</span>
     <span class="kw">pub</span> <span class="ident">context</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">Context</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">introspect</span>: <span class="ident">introspect::Introspector</span>,
+    <span class="doccomment">/// A wrapper object providing introspection routines to a context.</span>
+    <span class="kw">pub</span> <span class="ident">introspect</span>: <span class="ident">Introspector</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">Handler</span> {

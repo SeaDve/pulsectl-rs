@@ -40,16 +40,16 @@
 
 <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::controllers::error::ControllerError</span>;
 
-<span class="doccomment">/// Error thrown when PulseAudio throws an error code, there are 4 variants</span>
+<span class="doccomment">/// Error thrown when PulseAudio throws an error code.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Error</span> {
-    <span class="doccomment">/// When there&#39;s an error establishing a connection</span>
+    <span class="doccomment">/// An error that may occur while establishing a connection.</span>
     <span class="ident">Connect</span>(<span class="ident">String</span>),
-    <span class="doccomment">/// When the requested operation quis unexpectedly or is cancelled</span>
+    <span class="doccomment">/// The requested operation is cancelled or quitted unexpectedly.</span>
     <span class="ident">Operation</span>(<span class="ident">String</span>),
-    <span class="doccomment">/// When PulseAudio returns an error code in any circumstance</span>
+    <span class="doccomment">/// PulseAudio returns an error code in any circumstance.</span>
     <span class="ident">PulseAudio</span>(<span class="ident">String</span>),
-    <span class="doccomment">/// When an error occurred while fetching data from pulseaudio</span>
+    <span class="doccomment">/// A problem occurs while fetching data from pulseaudio.</span>
     <span class="ident">Controller</span>(<span class="ident">ControllerError</span>),
 }
 

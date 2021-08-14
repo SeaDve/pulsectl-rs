@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["Error","Error thrown when PulseAudio throws an error code, there are 4 variants"]],"mod":[["controllers","Terminologies"]],"struct":[["Handler",""]]});
+initSidebarItems({"enum":[["Error","Error thrown when PulseAudio throws an error code."]],"mod":[["controllers","These are controllers helpful when working with applications and devices."]],"struct":[["Handler","Main wrapper on libpulse-binding API"]]});

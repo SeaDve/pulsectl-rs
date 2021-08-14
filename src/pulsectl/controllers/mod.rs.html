@@ -625,26 +625,14 @@
 <span id="623">623</span>
 <span id="624">624</span>
 <span id="625">625</span>
-<span id="626">626</span>
-<span id="627">627</span>
-<span id="628">628</span>
-<span id="629">629</span>
 </pre><pre class="rust">
-<span class="doccomment">//! # Terminologies</span>
+<span class="doccomment">//! These are controllers helpful when working with applications and devices.</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! When you create a `SinkController`, you are working with audio playback devices and applications</span>
-<span class="doccomment">//! if you want to manipulate recording devices such as microphone volume,</span>
-<span class="doccomment">//! you&#39;ll need to use a `SourceController`. Both of these implement the same API, defined by</span>
-<span class="doccomment">//! the traits DeviceControl and AppControl.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ### Source</span>
-<span class="doccomment">//! Something that takes in audio (i.e. microphone)</span>
+<span class="doccomment">//! Both of these controllers implement the same API, defined by the traits DeviceControl</span>
+<span class="doccomment">//! and AppControl.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ### Source Output</span>
 <span class="doccomment">//! Application consuming that audio</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ### Sink</span>
-<span class="doccomment">//! Something that plays out audio (i.e. headphones)</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ### Sink Input</span>
 <span class="doccomment">//! Application producing that audio</span>
@@ -705,6 +693,8 @@
     (<span class="ident">volume</span> <span class="op">*</span> <span class="number">100.0</span>) <span class="op">*</span> (<span class="ident">f64::from</span>(<span class="ident">pulse::volume::Volume::NORMAL</span>.<span class="number">0</span>) <span class="op">/</span> <span class="number">100.0</span>)
 }
 
+<span class="doccomment">/// This handles device that plays out audio (e.g., headphone), so it is appropriate when dealing</span>
+<span class="doccomment">/// with audio playback devices and applications.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SinkController</span> {
     <span class="kw">pub</span> <span class="ident">handler</span>: <span class="ident">Handler</span>,
 }
@@ -982,6 +972,8 @@
     }
 }
 
+<span class="doccomment">/// This handles devices which takes in audio (e.g., microphone), so it is appropriate when</span>
+<span class="doccomment">/// manipulating recording devices such as microphone volume.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SourceController</span> {
     <span class="kw">pub</span> <span class="ident">handler</span>: <span class="ident">Handler</span>,
 }
