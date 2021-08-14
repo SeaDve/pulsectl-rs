@@ -629,7 +629,6 @@
 <span id="627">627</span>
 <span id="628">628</span>
 <span id="629">629</span>
-<span id="630">630</span>
 </pre><pre class="rust">
 <span class="doccomment">//! # Terminologies</span>
 <span class="doccomment">//!</span>
@@ -729,10 +728,9 @@
         });
         <span class="self">self</span>.<span class="ident">handler</span>.<span class="ident">wait_for_operation</span>(<span class="ident">op</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">server</span>.<span class="ident">borrow_mut</span>();
-        <span class="ident">result</span>
-            .<span class="ident">take</span>()
-            .<span class="ident">unwrap</span>()
-            .<span class="ident">ok_or</span>(<span class="ident">ControllerError::GetInfo</span>(<span class="string">&quot;Error getting information about the server&quot;</span>))
+        <span class="ident">result</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>().<span class="ident">ok_or</span>(<span class="ident">ControllerError::GetInfo</span>(
+            <span class="string">&quot;Error getting information about the server&quot;</span>,
+        ))
     }
 }
 
