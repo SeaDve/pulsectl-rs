@@ -22,7 +22,7 @@ impl std::fmt::Display for Error {
             Self::Connect(e) => f.write_str(&format!("Connect error: {}", e)),
             Self::Operation(e) => f.write_str(&format!("Operation error: {}", e)),
             Self::PulseAudio(e) => f.write_str(&format!("Pulse audio error: {}", e)),
-            Self::Controller(e) => f.write_str(&format!("Controller error: {}", e))
+            Self::Controller(e) => f.write_str(&format!("Controller error: {}", e)),
         }
     }
 }

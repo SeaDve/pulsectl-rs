@@ -96,9 +96,10 @@ impl SinkController {
         });
         self.handler.wait_for_operation(op)?;
         let mut result = server.borrow_mut();
-        result.take().unwrap().ok_or({
-            ControllerError::GetInfo("Error getting information about the server")
-        })
+        result
+            .take()
+            .unwrap()
+            .ok_or({ ControllerError::GetInfo("Error getting information about the server") })
     }
 }
 

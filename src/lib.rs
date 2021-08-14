@@ -1,3 +1,4 @@
+pub mod controllers;
 /// `pulsectl` is a high level wrapper around the PulseAudio bindings supplied by
 /// `libpulse_binding`. It provides simple access to sinks, inputs, sources and outputs allowing
 /// one to write audio control programs with ease.
@@ -27,9 +28,7 @@
 ///     );
 /// }
 /// ```
-
 mod error;
-pub mod controllers;
 
 use pulse::{
     context::{introspect, Context},
@@ -95,7 +94,9 @@ impl Handler {
                 pulse::context::State::Ready => break,
                 pulse::context::State::Failed | pulse::context::State::Terminated => {
                     eprintln!("context state failed/terminated, quitting...");
-                    return Err(Error::Connect("Context state failed/terminated without an error"));
+                    return Err(Error::Connect(
+                        "Context state failed/terminated without an error",
+                    ));
                 }
                 _ => {}
             }
@@ -110,10 +111,7 @@ impl Handler {
     }
 
     // loop until the passed operation is completed
-    pub fn wait_for_operation<G: ?Sized>(
-        &mut self,
-        op: Operation<G>,
-    ) -> Result<(), Error> {
+    pub fn wait_for_operation<G: ?Sized>(&mut self, op: Operation<G>) -> Result<(), Error> {
         loop {
             match self.mainloop.borrow_mut().iterate(false) {
                 IterateResult::Err(e) => return Err(e.into()),
