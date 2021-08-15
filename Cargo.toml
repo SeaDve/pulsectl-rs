@@ -16,5 +16,6 @@ edition = "2018"
 [lib]
 name = "pulsectl"
 
-[dependencies]
-pulse = { version = "2.24.0", package = "libpulse-binding" }
+[dependencies.pulse]
+package = "libpulse-binding"
+version = "2.24.0"
