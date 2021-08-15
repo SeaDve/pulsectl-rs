@@ -156,11 +156,6 @@
 <span id="154">154</span>
 <span id="155">155</span>
 <span id="156">156</span>
-<span id="157">157</span>
-<span id="158">158</span>
-<span id="159">159</span>
-<span id="160">160</span>
-<span id="161">161</span>
 </pre><pre class="rust">
 <span class="doccomment">//! `pulsectl` is a high level wrapper around the PulseAudio bindings supplied by</span>
 <span class="doccomment">//! `libpulse-binding` to make application development easier. It provides simple access to sinks,</span>
@@ -233,21 +228,16 @@
             .<span class="ident">set_str</span>(<span class="ident">pulse::proplist::properties::APPLICATION_NAME</span>, <span class="ident">name</span>)
             .<span class="ident">unwrap</span>();
 
-        <span class="kw">let</span> <span class="ident">mainloop</span>;
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">m</span>) <span class="op">=</span> <span class="ident">Mainloop::new</span>() {
-            <span class="ident">mainloop</span> <span class="op">=</span> <span class="ident">Rc::new</span>(<span class="ident">RefCell::new</span>(<span class="ident">m</span>));
-        } <span class="kw">else</span> {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Connect</span>(<span class="string">&quot;Failed to create mainloop&quot;</span>.<span class="ident">to_string</span>()));
-        }
+        <span class="kw">let</span> <span class="ident">mainloop</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">Mainloop::new</span>() {
+            <span class="prelude-val">Some</span>(<span class="ident">mainloop</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Rc::new</span>(<span class="ident">RefCell::new</span>(<span class="ident">mainloop</span>)),
+            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Connect</span>(<span class="string">&quot;Failed to create mainloop&quot;</span>.<span class="ident">to_string</span>())),
+        };
 
-        <span class="kw">let</span> <span class="ident">context</span>;
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">c</span>) <span class="op">=</span>
-            <span class="ident">Context::new_with_proplist</span>(<span class="ident">mainloop</span>.<span class="ident">borrow</span>().<span class="ident">deref</span>(), <span class="string">&quot;MainConn&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">proplist</span>)
-        {
-            <span class="ident">context</span> <span class="op">=</span> <span class="ident">Rc::new</span>(<span class="ident">RefCell::new</span>(<span class="ident">c</span>));
-        } <span class="kw">else</span> {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Connect</span>(<span class="string">&quot;Failed to create new context&quot;</span>.<span class="ident">to_string</span>()));
-        }
+        <span class="kw">let</span> <span class="ident">context</span> <span class="op">=</span>
+            <span class="kw">match</span> <span class="ident">Context::new_with_proplist</span>(<span class="ident">mainloop</span>.<span class="ident">borrow</span>().<span class="ident">deref</span>(), <span class="string">&quot;MainConn&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">proplist</span>) {
+                <span class="prelude-val">Some</span>(<span class="ident">context</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Rc::new</span>(<span class="ident">RefCell::new</span>(<span class="ident">context</span>)),
+                <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Connect</span>(<span class="string">&quot;Failed to create new context&quot;</span>.<span class="ident">to_string</span>())),
+            };
 
         <span class="ident">context</span>
             .<span class="ident">borrow_mut</span>()
