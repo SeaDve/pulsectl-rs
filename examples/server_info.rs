@@ -5,7 +5,7 @@ fn main() {
         .get_server_info()
         .expect("Failed to get server info");
 
-    // Get informations similar to the output of `pactl info` command
+    // Get information similar to the output of `pactl info` command
     println!("User Name: {:?}", server_info.user_name);
     println!("Host Name: {:?}", server_info.host_name);
     println!("Server Name: {:?}", server_info.server_name);
