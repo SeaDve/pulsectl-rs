@@ -69,21 +69,15 @@ impl Handler {
             .set_str(pulse::proplist::properties::APPLICATION_NAME, name)
             .unwrap();
 
-        let mainloop;
-        if let Some(m) = Mainloop::new() {
-            mainloop = Rc::new(RefCell::new(m));
-        } else {
-            return Err(Error::Connect("Failed to create mainloop".to_string()));
-        }
+        let mainloop = match Mainloop::new() {
+            Some(mainloop) => Rc::new(RefCell::new(mainloop)),
+            None => return Err(Error::Connect("Failed to create mainloop".to_string())),
+        };
 
-        let context;
-        if let Some(c) =
-            Context::new_with_proplist(mainloop.borrow().deref(), "MainConn", &proplist)
-        {
-            context = Rc::new(RefCell::new(c));
-        } else {
-            return Err(Error::Connect("Failed to create new context".to_string()));
-        }
+        let context = match Context::new_with_proplist(mainloop.borrow().deref(), "MainConn", &proplist) {
+            Some(context) => Rc::new(RefCell::new(context)),
+            None => return Err(Error::Connect("Failed to create new context".to_string())),
+        };
 
         context
             .borrow_mut()
