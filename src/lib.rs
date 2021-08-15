@@ -9,7 +9,7 @@
 //!
 //! # Example
 //!
-//! List all currently connected playback devices
+//! List all currently connected playback devices.
 //!
 //! ```no_run
 //! use pulsectl::controllers::SinkController;
@@ -33,7 +33,7 @@
 //! }
 //! ```
 //!
-//! For a more complete example, see `examples/change_device_vol.rs`.
+//! For more detailed examples, check the `examples` directory.
 
 pub mod controllers;
 mod error;

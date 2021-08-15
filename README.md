@@ -13,7 +13,7 @@ which is then a fork of [`krruzic/pulsectl-rust`](https://github.com/krruzic/pul
 
 ### Example
 
-List all currently connected playback devices
+List all currently connected playback devices.
 
 ```rust
 use pulsectl::controllers::SinkController;
@@ -37,4 +37,4 @@ for dev in devices.clone() {
 }
 ```
 
-For a more complete example, see `examples/change_device_vol.rs`.
+For more detailed examples, check the `examples` directory.
