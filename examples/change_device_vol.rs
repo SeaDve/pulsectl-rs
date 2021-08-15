@@ -16,7 +16,7 @@ fn main() {
             "[Index: {}] {}, [Volume: {}]",
             device.index,
             device.description.as_ref().unwrap(),
-            device.volume.print()
+            device.volume
         );
     }
 
@@ -33,4 +33,12 @@ fn main() {
 
     let device_index = input.trim().parse().expect("Invalid number");
     handler.increase_device_volume_by_percent(device_index, 0.05);
+
+    println!(
+        "Volume set to [Volume: {}]",
+        handler
+            .get_device_by_index(device_index)
+            .expect("Failed to get device by index")
+            .volume
+    )
 }

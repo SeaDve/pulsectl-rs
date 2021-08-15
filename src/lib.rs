@@ -74,10 +74,11 @@ impl Handler {
             None => return Err(Error::Connect("Failed to create mainloop".to_string())),
         };
 
-        let context = match Context::new_with_proplist(mainloop.borrow().deref(), "MainConn", &proplist) {
-            Some(context) => Rc::new(RefCell::new(context)),
-            None => return Err(Error::Connect("Failed to create new context".to_string())),
-        };
+        let context =
+            match Context::new_with_proplist(mainloop.borrow().deref(), "MainConn", &proplist) {
+                Some(context) => Rc::new(RefCell::new(context)),
+                None => return Err(Error::Connect("Failed to create new context".to_string())),
+            };
 
         context
             .borrow_mut()
