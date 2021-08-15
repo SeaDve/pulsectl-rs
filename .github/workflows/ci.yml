@@ -53,3 +53,21 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: test
+
+  examples:
+    name: Examples
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install pulseaudio
+        run: sudo apt-get install pulseaudio
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+          components: clippy
+      - name: "Build examples"
+        run: cargo build --examples
+      - name: "Run clippy on examples"
+        run: cargo clippy --examples
