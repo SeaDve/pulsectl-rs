@@ -374,7 +374,7 @@ impl DeviceControl<DeviceInfo> for SourceController {
     fn get_default_device(&mut self) -> Result<DeviceInfo, ControllerError> {
         let server_info = self.get_server_info();
         match server_info {
-            Ok(info) => self.get_device_by_name(info.default_sink_name.unwrap().as_ref()),
+            Ok(info) => self.get_device_by_name(info.default_source_name.unwrap().as_ref()),
             Err(e) => Err(e),
         }
     }
@@ -397,8 +397,8 @@ impl DeviceControl<DeviceInfo> for SourceController {
         let list_ref = list.clone();
 
         let op = self.handler.introspect.get_source_info_list(
-            move |sink_list: ListResult<&introspect::SourceInfo>| {
-                if let ListResult::Item(item) = sink_list {
+            move |source_list: ListResult<&introspect::SourceInfo>| {
+                if let ListResult::Item(item) = source_list {
                     list_ref.borrow_mut().as_mut().unwrap().push(item.into());
                 }
             },
@@ -414,8 +414,8 @@ impl DeviceControl<DeviceInfo> for SourceController {
         let dev_ref = device.clone();
         let op = self.handler.introspect.get_source_info_by_index(
             index,
-            move |sink_list: ListResult<&introspect::SourceInfo>| {
-                if let ListResult::Item(item) = sink_list {
+            move |source_list: ListResult<&introspect::SourceInfo>| {
+                if let ListResult::Item(item) = source_list {
                     dev_ref.borrow_mut().as_mut().unwrap().replace(item.into());
                 }
             },
@@ -432,8 +432,8 @@ impl DeviceControl<DeviceInfo> for SourceController {
         let dev_ref = device.clone();
         let op = self.handler.introspect.get_source_info_by_name(
             name,
-            move |sink_list: ListResult<&introspect::SourceInfo>| {
-                if let ListResult::Item(item) = sink_list {
+            move |source_list: ListResult<&introspect::SourceInfo>| {
+                if let ListResult::Item(item) = source_list {
                     dev_ref.borrow_mut().as_mut().unwrap().replace(item.into());
                 }
             },
@@ -476,14 +476,14 @@ impl DeviceControl<DeviceInfo> for SourceController {
         let op = self
             .handler
             .introspect
-            .set_sink_mute_by_index(index, mute, None);
+            .set_source_mute_by_index(index, mute, None);
         self.handler.wait_for_operation(op).ok();
     }
     fn set_device_mute_by_name(&mut self, name: &str, mute: bool) {
         let op = self
             .handler
             .introspect
-            .set_sink_mute_by_name(name, mute, None);
+            .set_source_mute_by_name(name, mute, None);
         self.handler.wait_for_operation(op).ok();
     }
     fn decrease_device_volume_by_percent(&mut self, index: u32, delta: f64) {
@@ -506,8 +506,8 @@ impl AppControl<ApplicationInfo> for SourceController {
         let list_ref = list.clone();
 
         let op = self.handler.introspect.get_source_output_info_list(
-            move |sink_list: ListResult<&introspect::SourceOutputInfo>| {
-                if let ListResult::Item(item) = sink_list {
+            move |source_list: ListResult<&introspect::SourceOutputInfo>| {
+                if let ListResult::Item(item) = source_list {
                     list_ref.borrow_mut().as_mut().unwrap().push(item.into());
                 }
             },
@@ -524,8 +524,8 @@ impl AppControl<ApplicationInfo> for SourceController {
         let app_ref = app.clone();
         let op = self.handler.introspect.get_source_output_info(
             index,
-            move |sink_list: ListResult<&introspect::SourceOutputInfo>| {
-                if let ListResult::Item(item) = sink_list {
+            move |source_list: ListResult<&introspect::SourceOutputInfo>| {
+                if let ListResult::Item(item) = source_list {
                     app_ref.borrow_mut().as_mut().unwrap().replace(item.into());
                 }
             },
